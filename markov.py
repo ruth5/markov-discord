@@ -65,6 +65,8 @@ filenames = sys.argv[1:]
 # Open the files and turn them into one long string
 text = open_and_read_file(filenames)
 
+chains = make_chains(text)
+
 
 
 client = discord.Client()
@@ -75,15 +77,15 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+
     if message.author == client.user:
         return
-    
-    # Get a Markov chain
-    chains = make_chains(text)
 
-    if message.content.startswith('$hello'):
-        await message.channel.send(chains)
+    if message.content.startswith('hello'):
+        await message.channel.send('hello')
+    else:
+        await message.channel.send(make_text(chains))
 
 DISCORD_TOKEN = os.environ['DISCORD_TOKEN']
-print(f"discord token is {DISCORD_TOKEN}")
+
 client.run(DISCORD_TOKEN)
